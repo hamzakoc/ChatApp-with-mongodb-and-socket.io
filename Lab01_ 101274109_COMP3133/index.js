@@ -4,25 +4,16 @@ const fs = require('fs');
 
 
 // a.	Delete canada.txt and usa.txt if already exist using fs module 
-fs.stat('canada.txt', function (err, stats) {
-    if (err) {
-        return console.error(err);
-    }
-    fs.unlink('canada.txt', function (err) {
-        if (err) return console.log(err);
-        console.log('Canada existing file deleted successfully');
-    });
+
+fs.unlink('canada.txt', function (err) {
+    if (err) return console.log(err);
+    console.log('Canada existing file deleted successfully');
 });
 
 
-fs.stat('usa.txt', function (err, stats) {
-    if (err) {
-        return console.error(err);
-    }
-    fs.unlink('usa.txt', function (err) {
-        if (err) return console.log(err);
-        console.log('USA existing file deleted successfully');
-    });
+fs.unlink('usa.txt', function (err) {
+    if (err) return console.log(err);
+    console.log('USA existing file deleted successfully');
 });
 
 
@@ -37,6 +28,7 @@ function getFilteredData(county, callback) {
         .pipe(csv())
         .on('data', (row) => {
             const headers = Object.keys(row);
+
             if (row[headers[0]] === county)
                 result.push(row)
         })
@@ -62,6 +54,7 @@ function callbackCanada(result) {
         .join('\n')
         .replace(/(^\[)|(\]$)/mg, '')
 
+    fs.writeFileSync('canada.txt', '"country","year","population" \n')
     fs.writeFileSync('canada.txt', csv, { flag: 'a' })
 }
 
@@ -75,7 +68,7 @@ function callbackUSA(result) {
     })
         .join('\n')
         .replace(/(^\[)|(\]$)/mg, '')
-
+    fs.writeFileSync('usa.txt', '"country","year","population" \n')
     fs.writeFileSync('usa.txt', csv, { flag: 'a' })
 }
 
